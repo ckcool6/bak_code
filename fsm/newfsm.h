@@ -17,6 +17,8 @@ typedef enum
     EVENT1 = 1,
     EVENT2,
     EVENT3,
+    EVENT4,
+    EVENT5,
 } Event;
 
 typedef struct

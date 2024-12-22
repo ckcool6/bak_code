@@ -8,8 +8,8 @@ StateTable monster[] = {
     {__MAKE_ID__(1), wait, __MAKE_HANDLE__(light_attack)},
     {__MAKE_ID__(2), light_attack, __MAKE_HANDLE__(heavy_attack)},
     {__MAKE_ID__(3), heavy_attack, __MAKE_HANDLE__(remote_attack)},
-    {__MAKE_ID__(1), remote_attack, __MAKE_HANDLE__(jump_attack)},
-    {__MAKE_ID__(2), jump_attack, __MAKE_HANDLE__(wait)},
+    {__MAKE_ID__(4), remote_attack, __MAKE_HANDLE__(jump_attack)},
+    {__MAKE_ID__(5), jump_attack, __MAKE_HANDLE__(wait)},
 };
 
 int g_max_num;
@@ -31,7 +31,7 @@ int main(int argc, char const *argv[]) {
     printf("\n");
     printf("\n");
 
-    if (event == 3) {
+    if (event == 5) {
       event = 1;
     } else {
       event++;
