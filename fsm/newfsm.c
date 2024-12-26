@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <windows.h>
 
+#define GREEN "\033[1;32;40m"
+#define COLOR_NONE "\033[0m"
 
 StateTable monster[] = {
     {__MAKE_ID__(1), wait, __MAKE_HANDLE__(light_attack)},
@@ -64,22 +66,20 @@ void FSM_process(FSM *_fsm, int event) {
         /* code */
         event_handle();
       }
-      //
-      FSM_state_transfer(_fsm, next_state);
+      // trans to next state
+      _fsm->current_state = next_state;
     } else {
       // nothing to do
     }
   }
 }
 
-void FSM_state_transfer(FSM *_fsm, int state) { _fsm->current_state = state; }
+void light_attack_handle() { printf(GREEN"*** lose little heath ***\n"COLOR_NONE); }
 
-void light_attack_handle() { printf("========lose little heath======\n"); }
+void heavy_attack_handle() { printf(GREEN"*** lost many of heath ***\n"COLOR_NONE); }
 
-void heavy_attack_handle() { printf("========lost many of heath=======\n"); }
+void remote_attack_handle() { printf(GREEN"*** fell bad ***\n"COLOR_NONE); }
 
-void remote_attack_handle() { printf("=========fell bad========\n"); }
+void jump_attack_handle() { printf(GREEN"*** fell angry ***\n"COLOR_NONE); }
 
-void jump_attack_handle() { printf("========fell angry=========\n"); }
-
-void wait_handle() { printf("========goto bed=======\n"); }
+void wait_handle() { printf(GREEN"*** goto bed ***\n"COLOR_NONE); }
