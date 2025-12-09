@@ -22,18 +22,18 @@ typedef struct FSM {
 } FSM;
 
 //
-int fsm_init(FSM *_fsm);
+int fsm_init(FSM *this);
 
-int fsm_main(FSM *_fsm);
+int fsm_main(FSM *this);
 
-int fsm_next_state(FSM *_fsm);
+int fsm_next_state(FSM *this);
 
-int fsm_add(FSM *_fsm, char *state, void (*handle)(FSM *, int, void **));
+int fsm_add(FSM *this, char *state, void (*handle)(FSM *, int, void **));
 
-int fsm_default(FSM *_fsm, void (*handle)(FSM *, int, void **));
+int fsm_default(FSM *this, void (*handle)(FSM *, int, void **));
 
-int fsm_remove(FSM *_fsm, char *state);
+int fsm_remove(FSM *this, char *state);
 
-int fsm_transfer_state(FSM *_fsm, char *state, int event_id, void **event);
+int fsm_transfer_state(FSM *this, char *state, int event_id, void **event);
 
-void fsm_terminate(FSM *_fsm);
+void fsm_terminate(FSM *this);
