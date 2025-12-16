@@ -6,7 +6,8 @@
  * @param this
  * @return int
  */
-int fsm_init(FSM *this) {
+int fsm_init(FSM *this)
+{
   this->fsm_base = NULL;
   this->fsm_cur_state_name = NULL;
   this->event_id = 0;
@@ -22,7 +23,8 @@ int fsm_init(FSM *this) {
  * @return int
  */
 int fsm_default(FSM *this,
-                void (*func)(FSM *this, int event_id, void **event)) {
+                void (*func)(FSM *this, int event_id, void **event))
+{
 
   this->fsm_base = malloc(sizeof(State));
   this->fsm_base->name = "default";
@@ -45,12 +47,15 @@ int fsm_default(FSM *this,
  * @param event
  * @return int
  */
-int fsm_transfer_state(FSM *this, char *state, int event_id, void **event) {
+int fsm_transfer_state(FSM *this, char *state, int event_id, void **event)
+{
   State *tmp = this->fsm_base;
-  while ((tmp != NULL) && (strcmp(tmp->name, state))) {
+  while ((tmp != NULL) && (strcmp(tmp->name, state)))
+  {
     tmp = tmp->next;
   }
-  if (tmp == NULL) {
+  if (tmp == NULL)
+  {
     return -1;
   }
   this->fsm_current_state = tmp;
@@ -69,11 +74,13 @@ int fsm_transfer_state(FSM *this, char *state, int event_id, void **event) {
  * @param handle
  * @return int
  */
-int fsm_add(FSM *this, char *state, void (*func)(FSM *, int, void **)) {
+int fsm_add(FSM *this, char *state, void (*func)(FSM *, int, void **))
+{
   State *tmp = this->fsm_base;
   State *new_state = malloc(sizeof(State));
   // 走到最后
-  while (tmp->next) {
+  while (tmp->next)
+  {
     tmp = tmp->next;
   }
   // 后插
@@ -90,17 +97,21 @@ int fsm_add(FSM *this, char *state, void (*func)(FSM *, int, void **)) {
  * @param this
  * @return int
  */
-int fsm_next_state(FSM *this) {
+int fsm_next_state(FSM *this)
+{
   State *tmp = this->fsm_base;
-  if ((this->fsm_base == NULL) || (this->fsm_current_state == NULL)) {
+  if ((this->fsm_base == NULL) || (this->fsm_current_state == NULL))
+  {
     return -1;
   }
 
-  while ((tmp->name != this->fsm_cur_state_name) && (tmp != NULL)) {
+  while ((tmp->name != this->fsm_cur_state_name) && (tmp != NULL))
+  {
     tmp = tmp->next;
   }
   Sleep(2000);
-  if (tmp == NULL) {
+  if (tmp == NULL)
+  {
     return -1;
   }
   tmp->handle(this, this->event_id, this->event);
@@ -114,8 +125,10 @@ int fsm_next_state(FSM *this) {
  * @param state
  * @return int
  */
-int fsm_remove(FSM *this, char *state) {
-  if (!strcmp(state, "default")) {
+int fsm_remove(FSM *this, char *state)
+{
+  if (!strcmp(state, "default"))
+  {
     return -1;
   }
   State *to_del;
@@ -131,15 +144,17 @@ int fsm_remove(FSM *this, char *state) {
 }
 
 /**
- * @brief 
+ * @brief
  * 终止状态机
- * @param obj 
+ * @param obj
  */
-void fsm_terminate(FSM *obj) {
+void fsm_terminate(FSM *obj)
+{
   // delete all states to prevent memory leek
   State *tmp = obj->fsm_base;
   State *to_del = tmp;
-  while (tmp) {
+  while (tmp)
+  {
     to_del = tmp;
     tmp = tmp->next;
     free(to_del);
@@ -149,4 +164,11 @@ void fsm_terminate(FSM *obj) {
   obj->fsm_current_state = NULL;
   obj->fsm_cur_state_name = NULL;
   obj->fsm_base = NULL;
+}
+
+int fsm_start(FSM *obj)
+{
+  while (!fsm_next_state(obj))
+    ;
+  return 0;
 }

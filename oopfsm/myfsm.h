@@ -1,8 +1,12 @@
 #pragma once
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
+
+#define _FSM_SEND_MESSAGE_(method, ...) \
+    fsm_##method(__VA_ARGS__)         
 
 
 struct FSM;
@@ -24,7 +28,7 @@ typedef struct FSM {
 //
 int fsm_init(FSM *this);
 
-int fsm_main(FSM *this);
+int fsm_start(FSM *this);
 
 int fsm_next_state(FSM *this);
 

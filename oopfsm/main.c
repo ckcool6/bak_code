@@ -20,51 +20,45 @@ int Event3(int n)
 void event_handle_1(FSM *this, int event_id, void **event)
 {
   Event1(2);
-  printf("id is %d\n", event_id);
+  printf("event_id is %d\n", event_id);
   printf("state is %s\n", this->fsm_cur_state_name);
   printf("g_num is %d\n", g_num);
   printf("--------------\n");
-  fsm_transfer_state(this, "light_attack", 1, (void *)Event1);
+  _FSM_SEND_MESSAGE_(transfer_state, this, "light_attack", 1, (void *)Event1);
 }
 
 void event_handle_2(FSM *this, int event_id, void **event)
 {
   Event3(2);
-  printf("id is %d\n", event_id);
+  printf("event_id is %d\n", event_id);
   printf("state is %s\n", this->fsm_cur_state_name);
   printf("g_num is %d\n", g_num);
   printf("--------------\n");
-  fsm_transfer_state(this, "remote_attack", 2, (void*)Event3);
+  _FSM_SEND_MESSAGE_(transfer_state, this, "remote_attack", 2, (void *)Event3);
 }
 
 void event_handle_3(FSM *this, int event_id, void **event)
 {
   Event2(2);
-  printf("id is %d\n", event_id);
+  printf("event_id is %d\n", event_id);
   printf("state is %s\n", this->fsm_cur_state_name);
   printf("g_num is %d\n", g_num);
   printf("--------------\n");
-  fsm_transfer_state(this, "default", 3, (void*)Event2);
+  _FSM_SEND_MESSAGE_(transfer_state, this, "default", 3, (void *)Event2);
 }
-
 
 int main()
 {
   FSM this;
-  fsm_init(&this);
 
-  fsm_default(&this, event_handle_1); // 设置默认状态
+  _FSM_SEND_MESSAGE_(init, &this);
 
-  fsm_add(&this, "remote_attack", event_handle_3);
-  fsm_add(&this, "light_attack", event_handle_2);
+  _FSM_SEND_MESSAGE_(default, &this, event_handle_1); // 设置默认状态
 
-  fsm_main(&this);
-  return 0;
-}
+  _FSM_SEND_MESSAGE_(add, &this, "remote_attack", event_handle_3);
+  _FSM_SEND_MESSAGE_(add, &this, "light_attack", event_handle_2);
 
-int fsm_main(FSM *obj)
-{
-  while (!fsm_next_state(obj))
-    ;
+  _FSM_SEND_MESSAGE_(start, &this);
+
   return 0;
 }
