@@ -1,11 +1,5 @@
 #include "myfsm.h"
 
-/**
- * @brief
- * 初始化状态机
- * @param this
- * @return int
- */
 int fsm_init(FSM *this)
 {
   this->fsm_base = NULL;
@@ -15,13 +9,7 @@ int fsm_init(FSM *this)
   return 0;
 }
 
-/**
- * @brief
- * 设置默认状态
- * @param this
- * @param func
- * @return int
- */
+
 int fsm_default(FSM *this,
                 void (*func)(FSM *this, int event_id, void **event))
 {
@@ -38,15 +26,7 @@ int fsm_default(FSM *this,
   return 0;
 }
 
-/**
- * @brief
- * 转换状态
- * @param this
- * @param state
- * @param event_id
- * @param event
- * @return int
- */
+
 bool fsm_transfer_state(FSM *this, char *state, int event_id, void **event)
 {
   State *tmp = this->fsm_base;
@@ -71,14 +51,7 @@ bool fsm_transfer_state(FSM *this, char *state, int event_id, void **event)
   return true;
 }
 
-/**
- * @brief
- * 添加新状态
- * @param this
- * @param state
- * @param handle
- * @return int
- */
+
 int fsm_add(FSM *this, char *state, void (*func)(FSM *, int, void **))
 {
   State *tmp = this->fsm_base;
@@ -96,12 +69,7 @@ int fsm_add(FSM *this, char *state, void (*func)(FSM *, int, void **))
   return 0;
 }
 
-/**
- * @brief
- * 执行下一个状态
- * @param this
- * @return int
- */
+
 bool fsm_next_state(FSM *this)
 {
   State *tmp = this->fsm_base;
@@ -131,13 +99,7 @@ bool fsm_next_state(FSM *this)
   return true;
 }
 
-/**
- * @brief
- * 删除状态
- * @param this
- * @param state
- * @return int
- */
+
 bool fsm_remove(FSM *this, char *state)
 {
   State *to_del;
@@ -169,11 +131,7 @@ bool fsm_remove(FSM *this, char *state)
   }
 }
 
-/**
- * @brief
- * 终止状态机
- * @param obj
- */
+
 void fsm_terminate(FSM *obj)
 {
   // delete all states to prevent memory leek
