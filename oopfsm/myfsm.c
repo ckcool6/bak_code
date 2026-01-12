@@ -50,18 +50,23 @@ int fsm_default(FSM *this,
 int fsm_transfer_state(FSM *this, char *state, int event_id, void **event)
 {
   State *tmp = this->fsm_base;
+
   while ((tmp != NULL) && (strcmp(tmp->name, state)))
   {
     tmp = tmp->next;
   }
-  if (tmp == NULL)
+
+  if (tmp != NULL)
+  {
+    this->fsm_current_state = tmp;
+    this->fsm_cur_state_name = tmp->name;
+    this->event_id = event_id;
+    this->event = event;
+  }
+  else
   {
     return -1;
   }
-  this->fsm_current_state = tmp;
-  this->fsm_cur_state_name = tmp->name;
-  this->event_id = event_id;
-  this->event = event;
 
   return 0;
 }
@@ -100,21 +105,29 @@ int fsm_add(FSM *this, char *state, void (*func)(FSM *, int, void **))
 int fsm_next_state(FSM *this)
 {
   State *tmp = this->fsm_base;
-  if ((this->fsm_base == NULL) || (this->fsm_current_state == NULL))
+  if ((this->fsm_base != NULL) || (this->fsm_current_state != NULL))
+  {
+    while ((tmp->name != this->fsm_cur_state_name) && (tmp != NULL))
+    {
+      tmp = tmp->next;
+    }
+  }
+  else
   {
     return -1;
   }
 
-  while ((tmp->name != this->fsm_cur_state_name) && (tmp != NULL))
-  {
-    tmp = tmp->next;
-  }
   Sleep(2000);
-  if (tmp == NULL)
+
+  if (tmp != NULL)
+  {
+    tmp->handle(this, this->event_id, this->event);
+  }
+  else
   {
     return -1;
   }
-  tmp->handle(this, this->event_id, this->event);
+
   return 0;
 }
 
@@ -127,20 +140,33 @@ int fsm_next_state(FSM *this)
  */
 int fsm_remove(FSM *this, char *state)
 {
-  if (!strcmp(state, "default"))
+  State *to_del;
+  State *tmp = this->fsm_base;
+
+  if (strcmp(state, "default"))
+  {
+    while ((tmp->next != NULL) && (strcmp(tmp->next->name, state)))
+    {
+      tmp = tmp->next;
+    }
+  }
+  else
   {
     return -1;
   }
-  State *to_del;
-  State *tmp = this->fsm_base;
-  while ((tmp->next != NULL) && (strcmp(tmp->next->name, state)))
-    tmp = tmp->next;
-  if (tmp == NULL)
+
+  if (tmp != NULL)
+  {
+    to_del = tmp->next;
+    tmp->next = tmp->next->next;
+    free(to_del);
+
+    return 0;
+  }
+  else
+  {
     return -1;
-  to_del = tmp->next;
-  tmp->next = tmp->next->next;
-  free(to_del);
-  return 0;
+  }
 }
 
 /**

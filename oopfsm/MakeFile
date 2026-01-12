@@ -1,9 +1,0 @@
-main: myfsm.o main.o
-	@gcc -o main myfsm.o main.o
-	$(info Completed!)
-
-myfsm.o: myfsm.h myfsm.c
-	@gcc -c myfsm.c
-	
-main.o: myfsm.h main.c
-	@gcc -c main.c
