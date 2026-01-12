@@ -47,7 +47,7 @@ int fsm_default(FSM *this,
  * @param event
  * @return int
  */
-int fsm_transfer_state(FSM *this, char *state, int event_id, void **event)
+bool fsm_transfer_state(FSM *this, char *state, int event_id, void **event)
 {
   State *tmp = this->fsm_base;
 
@@ -65,10 +65,10 @@ int fsm_transfer_state(FSM *this, char *state, int event_id, void **event)
   }
   else
   {
-    return -1;
+    return false;
   }
 
-  return 0;
+  return true;
 }
 
 /**
@@ -102,7 +102,7 @@ int fsm_add(FSM *this, char *state, void (*func)(FSM *, int, void **))
  * @param this
  * @return int
  */
-int fsm_next_state(FSM *this)
+bool fsm_next_state(FSM *this)
 {
   State *tmp = this->fsm_base;
   if ((this->fsm_base != NULL) || (this->fsm_current_state != NULL))
@@ -114,7 +114,7 @@ int fsm_next_state(FSM *this)
   }
   else
   {
-    return -1;
+    return false;
   }
 
   Sleep(2000);
@@ -125,10 +125,10 @@ int fsm_next_state(FSM *this)
   }
   else
   {
-    return -1;
+    return false;
   }
 
-  return 0;
+  return true;
 }
 
 /**
@@ -138,7 +138,7 @@ int fsm_next_state(FSM *this)
  * @param state
  * @return int
  */
-int fsm_remove(FSM *this, char *state)
+bool fsm_remove(FSM *this, char *state)
 {
   State *to_del;
   State *tmp = this->fsm_base;
@@ -152,7 +152,7 @@ int fsm_remove(FSM *this, char *state)
   }
   else
   {
-    return -1;
+    return false;
   }
 
   if (tmp != NULL)
@@ -161,11 +161,11 @@ int fsm_remove(FSM *this, char *state)
     tmp->next = tmp->next->next;
     free(to_del);
 
-    return 0;
+    return true;
   }
   else
   {
-    return -1;
+    return false;
   }
 }
 
@@ -194,7 +194,7 @@ void fsm_terminate(FSM *obj)
 
 int fsm_start(FSM *obj)
 {
-  while (!fsm_next_state(obj))
+  while (fsm_next_state(obj))
     ;
   return 0;
 }

@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
+#include <stdbool.h>
 
 #define _FSM_SEND_MESSAGE_(method, ...) \
     fsm_##method(__VA_ARGS__)         
@@ -30,14 +31,14 @@ int fsm_init(FSM *this);
 
 int fsm_start(FSM *this);
 
-int fsm_next_state(FSM *this);
+bool fsm_next_state(FSM *this);
 
 int fsm_add(FSM *this, char *state, void (*handle)(FSM *, int, void **));
 
 int fsm_default(FSM *this, void (*handle)(FSM *, int, void **));
 
-int fsm_remove(FSM *this, char *state);
+bool fsm_remove(FSM *this, char *state);
 
-int fsm_transfer_state(FSM *this, char *state, int event_id, void **event);
+bool fsm_transfer_state(FSM *this, char *state, int event_id, void **event);
 
 void fsm_terminate(FSM *this);
