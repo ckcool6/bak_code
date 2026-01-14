@@ -49,16 +49,17 @@ void event_handle_3(FSM *this, int event_id, void **event)
 
 int main()
 {
-  FSM this;
 
-  _FSM_SEND_MESSAGE_(init, &this);
+  FSM* fsm = malloc(sizeof(FSM));
 
-  _FSM_SEND_MESSAGE_(default, &this, event_handle_1); // 设置默认状态
+  _FSM_SEND_MESSAGE_(init, fsm);
+  _FSM_SEND_MESSAGE_(default, fsm, event_handle_1); // 设置默认状态
 
-  _FSM_SEND_MESSAGE_(add, &this, "remote_attack", event_handle_3);
-  _FSM_SEND_MESSAGE_(add, &this, "light_attack", event_handle_2);
+  _FSM_SEND_MESSAGE_(add, fsm, "remote_attack", event_handle_3);
+  _FSM_SEND_MESSAGE_(add, fsm, "light_attack", event_handle_2);
 
-  _FSM_SEND_MESSAGE_(start, &this);
+  _FSM_SEND_MESSAGE_(start, fsm);
 
+  free(fsm);
   return 0;
 }
